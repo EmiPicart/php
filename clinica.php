@@ -70,6 +70,31 @@
                 </table>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-hover mt-5">
+                    <thead>
+                        <tr>
+                            <th>DNI</th>
+                            <th>Nombre y apellido</th>
+                            <th>Edad</th>
+                            <th>Peso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            foreach($aPacientes as $pos){?>
+                                <tr>
+                                    <td><?php echo $pos["dni"] ?></td>
+                                    <td><?php echo $pos["nombre"] ?></td>
+                                    <td><?php echo $pos["edad"] ?></td>
+                                    <td><?php echo $pos["peso"] ?></td>
+                                </tr>
+                            <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>
