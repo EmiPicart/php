@@ -83,12 +83,12 @@
                     </thead>
                     <tbody>
                         <?php
-                            foreach($aPacientes as $pos){?>
+                            foreach($aPacientes as $paciente){?>
                                 <tr>
-                                    <td><?php echo $pos["dni"] ?></td>
-                                    <td><?php echo $pos["nombre"] ?></td>
-                                    <td><?php echo $pos["edad"] ?></td>
-                                    <td><?php echo $pos["peso"] ?></td>
+                                    <td><?php echo $paciente["dni"] ?></td>
+                                    <td><?php echo $paciente["nombre"] ?></td>
+                                    <td><?php echo $paciente["edad"] ?></td>
+                                    <td><?php echo $paciente["peso"] ?></td>
                                 </tr>
                             <?php } ?>
                     </tbody>
