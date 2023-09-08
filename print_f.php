@@ -19,7 +19,8 @@
 
             //file_put_contents("notas.txt", $variable);
         }else{
-            file_put_contents("datos.txt", $variable);
+            $contenido = "Datos de la variable ==>\n" . $variable;
+            file_put_contents("datos.txt", $contenido);
         }
     }
 
