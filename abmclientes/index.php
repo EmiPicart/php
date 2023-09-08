@@ -30,9 +30,13 @@
 
             file_put_contents("archivo.txt", $jsonClientes);
         }
+    }
+
+    $pos = isset($_GET["pos"]) && $_GET["pos"] >= 0 ? $_GET["pos"] : "";
+
+    if(isset($_GET["do"]) && $_GET["do"] == "eliminar"){
         
     }
-    print_r($aClientes);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -55,19 +59,19 @@
                 <form action="" method="post" enctype="multipart/form-data">
                     <div>
                         <label for="">DNI:*</label>
-                        <input type="text" id="txtDni" name="txtDni" class="form-control">
+                        <input type="text" id="txtDni" name="txtDni" class="form-control" value="<?php echo isset($aClientes[$pos])? $aClientes[$pos]["dni"] : ""; ?>">
                     </div>
                     <div>
                         <label for="">Nombre:*</label>
-                        <input type="text" id="txtNombre" name="txtNombre" class="form-control">
+                        <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="<?php echo isset($aClientes[$pos])? $aClientes[$pos]["nombre"] : ""; ?>">
                     </div>
                     <div>
                         <label for="">Teléfono:*</label>
-                        <input type="text" id="txtTel" name="txtTel" class="form-control">
+                        <input type="text" id="txtTel" name="txtTel" class="form-control" value="<?php echo isset($aClientes[$pos])? $aClientes[$pos]["telefono"] : ""; ?>">
                     </div>
                     <div>
                         <label for="">Correo:*</label>
-                        <input type="mail" id="txtCorreo" name="txtCorreo" class="form-control">
+                        <input type="mail" id="txtCorreo" name="txtCorreo" class="form-control" value="<?php echo isset($aClientes[$pos])? $aClientes[$pos]["correo"] : ""; ?>">
                     </div>
                     <div>
                         <label for="">Archivo adjunto <input type="file" name="imagen1" id="imagen1" accept=".jpg, .jpeg, .png"></label>
@@ -75,7 +79,7 @@
                     </div>
                     <div>
                         <button type="submit" id="btnGuardar" name="btnGuardar" class="btn btn-primary">Guardar</button>
-                        <button type="submit" id="btnNuevo" name="btnNuevo" class="btn btn-danger">Nuevo</button>
+                        <a href="index.php" id="btnNuevo" name="btnNuevo" class="btn btn-danger">Nuevo</a>
                     </div>
                 </form>
             </div>
@@ -98,8 +102,8 @@
                                 <td><?php echo $cliente["nombre"] ?></td>
                                 <td><?php echo $cliente["correo"] ?></td>                            
                                 <td>
-                                    <a href="index.php?pos=<?php echo $pos ?>"><i class="bi bi-pencil-square"></i></a>
-                                    <a href="index.php?pos=<?php echo $pos ?>"><i class="bi bi-trash-fill"></i></a>
+                                    <a href="index.php?pos=<?php echo $pos ?>&do=editar"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="index.php?pos=<?php echo $pos ?>&do=eliminar"><i class="bi bi-trash-fill"></i></a>
                                 </td>
 
                             </tr>
