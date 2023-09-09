@@ -5,6 +5,14 @@
 
     $aClientes = array();
 
+    function guardarArchivo(){
+        if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
+            $nombre = date("Ymdhmsi") . rand(1000,2000);
+            $archivo_temp = $_FILES["archivo"]["tmp_name"];
+            move_uploaded_file($archivo_temp, "imagenes/$nombre.pdf");
+        }
+    }
+
     if(file_exists("archivo.txt")){
         $jsonClientes = file_get_contents("archivo.txt");
 
@@ -13,29 +21,46 @@
         $aClientes = array();
     }
 
+    $pos = isset($_GET["pos"]) && $_GET["pos"] >= 0 ? $_GET["pos"] : "";
+
     if($_POST){
         if(isset($_POST["btnGuardar"])){
             $dni = trim($_POST["txtDni"]);
             $nombre = trim($_POST["txtNombre"]);
             $telefono = trim($_POST["txtTel"]);
             $correo = trim($_POST["txtCorreo"]);
+            $nombreImagen = trim($_POST["imagen1"]);
 
-            $aClientes[] = array("dni" => $dni,
+            if($pos >= 0){
+                $aClientes[$pos] = array("dni" => $dni,
                                 "nombre" => $nombre,
                                 "telefono" => $telefono,
-                                "correo" => $correo
+                                "correo" => $correo,
+                                "imagen" => $nombreImagen
                             );
-            
+            }else{
+                $aClientes[] = array("dni" => $dni,
+                                "nombre" => $nombre,
+                                "telefono" => $telefono,
+                                "correo" => $correo,
+                                "imagen" => $nombreImagen
+                            );
+            }
+
             $jsonClientes = json_encode($aClientes);
 
             file_put_contents("archivo.txt", $jsonClientes);
         }
     }
 
-    $pos = isset($_GET["pos"]) && $_GET["pos"] >= 0 ? $_GET["pos"] : "";
-
     if(isset($_GET["do"]) && $_GET["do"] == "eliminar"){
-        
+        unset($aClientes[$pos]);
+
+        $jsonClientes = json_encode($aClientes);
+
+        file_put_contents("archivo.txt", $jsonClientes);
+
+        header("Location: index.php");
     }
 ?>
 <!DOCTYPE html>
@@ -48,14 +73,14 @@
     <title>ABM Clientes</title>
 </head>
 <body>
-    <main class="container">
+    <main class="container-fluid">
         <div class="row">
             <div class="col-12 text-center">
                 <h1>Registro de clientes</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-5">
+            <div class="col-5 offset-1">
                 <form action="" method="post" enctype="multipart/form-data">
                     <div>
                         <label for="">DNI:*</label>
