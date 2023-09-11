@@ -5,14 +5,6 @@
 
     $aClientes = array();
 
-    function guardarArchivo(){
-        if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
-            $nombre = date("Ymdhmsi") . rand(1000,2000);
-            $archivo_temp = $_FILES["archivo"]["tmp_name"];
-            move_uploaded_file($archivo_temp, "imagenes/$nombre.pdf");
-        }
-    }
-
     if(file_exists("archivo.txt")){
         $jsonClientes = file_get_contents("archivo.txt");
 
@@ -29,9 +21,28 @@
             $nombre = trim($_POST["txtNombre"]);
             $telefono = trim($_POST["txtTel"]);
             $correo = trim($_POST["txtCorreo"]);
-            $nombreImagen = trim($_POST["imagen1"]);
+            $nombreImagen = "";
 
             if($pos >= 0){
+                if($_FILES["imagen1"]["error"] == UPLOAD_ERR_OK){
+                    $nombreAleatorio = date("Ymdhmsi") . rand(1000,2000);
+
+                    $archivo_temp = $_FILES["imagen1"]["tmp_name"];
+
+                    $extension = strtolower(pathinfo($_FILES["imagen1"]["name"], PATHINFO_EXTENSION));
+
+                    if($extension == "jpg" || $extension == "jpeg" || $extension == "png"){
+                        $nombreImagen = "$nombreAleatorio.$extension";
+                        move_uploaded_file($archivo_temp, "imagenes/$nombreImagen");
+                    }
+
+                    if($aClientes[$pos]['imagen'] != "" && file_exists("imagenes/" . $aClientes[$pos]['imagen'])){
+                        unlink("imagenes/".$aClientes[$pos]["imagen"]);
+                    }
+                }else{
+                    $nombreImagen = $aClientes[$pos]["imagen"];
+                }
+
                 $aClientes[$pos] = array("dni" => $dni,
                                 "nombre" => $nombre,
                                 "telefono" => $telefono,
@@ -39,6 +50,19 @@
                                 "imagen" => $nombreImagen
                             );
             }else{
+                if($_FILES["imagen1"]["error"] == UPLOAD_ERR_OK){
+                    $nombreAleatorio = date("Ymdhmsi") . rand(1000,2000);
+
+                    $archivo_temp = $_FILES["imagen1"]["tmp_name"];
+
+                    $extension = strtolower(pathinfo($_FILES["imagen1"]["name"], PATHINFO_EXTENSION));
+
+                    if($extension == "jpg" || $extension == "jpeg" || $extension == "png"){
+                        $nombreImagen = "$nombreAleatorio.$extension";
+                        move_uploaded_file($archivo_temp, "imagenes/$nombreImagen");
+                    }
+                }
+
                 $aClientes[] = array("dni" => $dni,
                                 "nombre" => $nombre,
                                 "telefono" => $telefono,
@@ -99,7 +123,7 @@
                         <input type="mail" id="txtCorreo" name="txtCorreo" class="form-control" value="<?php echo isset($aClientes[$pos])? $aClientes[$pos]["correo"] : ""; ?>">
                     </div>
                     <div>
-                        <label for="">Archivo adjunto <input type="file" name="imagen1" id="imagen1" accept=".jpg, .jpeg, .png"></label>
+                        <label for="">Archivo adjunto <input type="file" name="imagen1" id="imagen1" accept=".jpg, .jpeg, .png" value="<?php echo isset($aClientes[$pos])? $aClientes[$pos]["imagen"] : ""; ?>"></label>
                         <p>Archivos admitidos: .jpg, .jpeg, .png</p>
                     </div>
                     <div>
@@ -122,10 +146,14 @@
                     <tbody>
                         <?php foreach($aClientes as $pos => $cliente) : ?>
                             <tr>
-                                <td>prox</td>
+                                <td>
+                                    <?php if($cliente["imagen"] != ""): ?>
+                                        <img src="imagenes/<?php echo $cliente["imagen"] ?>" class="img-thumbnail">
+                                    <?php endif; ?>
+                                </td>
                                 <td><?php echo $cliente["dni"]; ?></td>
                                 <td><?php echo $cliente["nombre"] ?></td>
-                                <td><?php echo $cliente["correo"] ?></td>                            
+                                <td><?php echo $cliente["correo"] ?></td>
                                 <td>
                                     <a href="index.php?pos=<?php echo $pos ?>&do=editar"><i class="bi bi-pencil-square"></i></a>
                                     <a href="index.php?pos=<?php echo $pos ?>&do=eliminar"><i class="bi bi-trash-fill"></i></a>
