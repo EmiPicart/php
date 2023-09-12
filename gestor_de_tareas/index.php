@@ -30,15 +30,15 @@
                                         "descripcion" => $descripcion,
                                         "fecha" => $fecha
                                     );
-            }
-
-            $aTareas[] = array("prioridad" => $prioridad,
+            }else{
+                $aTareas[] = array("prioridad" => $prioridad,
                                 "usuario" => $usuario,
                                 "estado" => $estado,
                                 "titulo" => $titulo,
                                 "descripcion" => $descripcion,
                                 "fecha" => $fecha
                             );
+            }
 
             $jsonTareas = json_encode($aTareas);
 
@@ -84,8 +84,8 @@
                     </select>
             </div>
             <div class="col-4">
-                    <label for="usuario">Usuario</label>
-                    <select name="lstUsuario" id="ltsUsuario" class="form-control" required>
+                    <label for="">Usuario</label>
+                    <select name="ltsUsuario" id="ltsUsuario" class="form-control" required>
                         <option disabled selected>Seleccionar</option>
                         <option value="Ana" <?php echo isset($aTareas[$pos]) && $aTareas[$pos]["usuario"] == "Ana" ? "selected" : "" ?>>Ana</option>
                         <option value="Bernabe" <?php echo isset($aTareas[$pos]) && $aTareas[$pos]["usuario"] == "Bernabe" ? "selected" : "" ?>>Bernabé</option>
@@ -93,7 +93,7 @@
                     </select>
             </div>
             <div class="col-4">
-                    <label for="estado">Estado</label>
+                    <label for="">Estado</label>
                     <select name="lstEstado" id="lstEstado" class="form-control" required>
                         <option disabled selected>Seleccionar</option>
                         <option value="Sin asignar" <?php echo isset($aTareas[$pos]) && $aTareas[$pos]["estado"] == "Sin asignar" ? "selected" : "" ?>>Sin asignar</option>
@@ -107,7 +107,7 @@
                 <input type="text" name="txtTitulo" id="txtTitulo" class="form-control" value="<?php echo isset($aTareas[$pos])? $aTareas[$pos]["titulo"] : "" ?>" required>
             </div>
             <div class="col-12">
-                <textarea name="txtDescripcion" id="txtDescripcion" cols="30" rows="3" class="form-control" placeholder="<?php echo isset($aTareas[$pos])? $aTareas[$pos]["descripcion"] : "" ?>" required></textarea>
+                <textarea name="txtDescripcion" id="txtDescripcion" cols="30" rows="3" class="form-control" required><?php echo isset($aTareas[$pos])? $aTareas[$pos]["descripcion"] : "" ?></textarea>
             </div>
             <div class="col-12 text-center pb-3">
                 <button type="submit" name="btnEnviar" id="btnEnviar" class="btn btn-primary">ENVIAR</button>
